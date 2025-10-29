@@ -1,7 +1,9 @@
-#ifndef SNAKE_GAMEGR_H
-#define SNAKE_GAMEGR_H
+#ifndef SNAKE_GAME_H
+#define SNAKE_GAME_H
 
 #pragma once
+#include <map>
+
 #include "../Field/Field.h"
 #include "../Apple/Apple.h"
 #include "../Snake/Snake.h"
@@ -14,6 +16,7 @@ const int START_Y = FIELD_HEIGHT / 2;
 const int COUNT_X = FIELD_WIDTH - 2;
 const int COUNT_Y = FIELD_HEIGHT - 2;
 const int DELAY_MS = 250;
+const std::string ERROR_MSG = "Failed to initialize graphics!";
 
 class Game
 {
@@ -30,9 +33,11 @@ private:
     bool gameOver;
     bool gameWon;
 
+    std::unordered_map<int, std::function<void()>> InitMapSpecialKeys();
+    void CheckGraphicInit();
     void Render();
     void InitializeGame();
 };
 
 
-#endif //SNAKE_GAMEGR_H
+#endif //SNAKE_GAME_H

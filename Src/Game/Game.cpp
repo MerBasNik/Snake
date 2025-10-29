@@ -1,6 +1,7 @@
 #include "../Game/Game.h"
 #include "../Graphics/Graphics.h"
 #include <iostream>
+#include <map>
 
 Game::Game()
 {
@@ -10,41 +11,49 @@ Game::Game()
     apple.Create(snake.GetBody());
 }
 
-//TODO в константу сообщение и вынести в отдельный метод
+void Game::CheckGraphicInit()
+{
+    if (!graphics.Initialize(snake.GetTotal()))
+    {
+        std::cout << ERROR_MSG << std::endl;
+    }
+}
+
+std::unordered_map<int, std::function<void()>> Game::InitMapSpecialKeys()
+{
+    return {
+        {EXIT, [this]() {isRunning = false;}},
+        {RESTART, [this]() {InitializeGame();}},
+    };
+}
+
 void Game::RunGame()
 {
-    if (!graphics.Initialize())
-    {
-        std::cout << "Failed to initialize graphics!" << std::endl;
-        return;
-    }
+    CheckGraphicInit();
     int inputKey;
     bool moved;
+    std::unordered_map<int, std::function<void()>> specialKeys = InitMapSpecialKeys();
     while (isRunning && graphics.IsWindowOpen())
     {
         graphics.ProcessEvents();
         inputKey = graphics.GetInput();
-        //можно исп-ть тд map
-        switch (inputKey)
+        auto it = specialKeys.find(inputKey);
+        if (it != specialKeys.end())
         {
-            case EXIT:
-                isRunning = false;
-                break;
-            case RESTART:
-                InitializeGame();
-                break;
-            default:
-                if (!gameOver && !gameWon) {
-                    moved = snake.Move(inputKey, apple);
-                    if (!moved)
-                    {
-                        gameOver = true;
-                    }
-                    gameWon = snake.IsWin();
-                    Render();
-                } else {
-                    graphics.PrintResult(gameWon, gameOver);
+            it->second();
+        } else {
+            if (!gameOver && !gameWon)
+            {
+                moved = snake.Move(inputKey, apple);
+                if (!moved)
+                {
+                    gameOver = true;
                 }
+                gameWon = snake.IsWin();
+                Render();
+            } else {
+                graphics.PrintResult(gameWon, gameOver);
+            }
         }
         sf::sleep(sf::milliseconds(DELAY_MS));
     }

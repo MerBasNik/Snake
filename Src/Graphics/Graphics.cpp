@@ -9,14 +9,18 @@ Graphics::Graphics() :
 {
 }
 
-bool Graphics::Initialize()
+void Graphics::CheckInit()
 {
     if (!font.openFromFile("arial.ttf"))
     {
-        std::cout << "Шрифт не найден. Положите arial.ttf в папку с игрой." << std::endl;
-        return false;
+        std::cout << ERROR_MSG << std::endl;
     }
-    scoreText = sf::Text(font, "Score: 0", 24);
+}
+
+bool Graphics::Initialize(int score)
+{
+    CheckInit();
+    scoreText = sf::Text(font, "Score: " + std::to_string(score), 24);
     scoreText.setFillColor(sf::Color::White);
     scoreText.setPosition({CELL_SIZE, CELL_SIZE - 24});
     window.setFramerateLimit(60);
@@ -25,21 +29,21 @@ bool Graphics::Initialize()
 
 void Graphics::Render(const std::deque<std::pair<int, int>>& snakeBody, const std::pair<int, int> &applePos, int score)
 {
-    window.clear(sf::Color::Black);
+    window.clear(WINDOW_COLOR);
 
-    DrawBorder();
-    DrawApple(applePos);
-    DrawSnake(snakeBody);
+    DrawBorder(BORDER_COLOR);
+    DrawApple(applePos, APPLE_COLOR);
+    DrawSnake(snakeBody, SNAKE_HEAD_COLOR, SNAKE_TAIL_COLOR);
 
     scoreText.setString("Score: " + std::to_string(score));
     window.draw(scoreText);
     window.display();
 }
 
-void Graphics::DrawBorder()
+void Graphics::DrawBorder(sf::Color borderColor)
 {
     sf::RectangleShape wall(sf::Vector2f(CELL_SIZE, CELL_SIZE));
-    wall.setFillColor(sf::Color::Blue);
+    wall.setFillColor(borderColor);
 
     for (int x = 0; x < FIELD_WIDTH; x++)
     {
@@ -58,26 +62,25 @@ void Graphics::DrawBorder()
     }
 }
 
-void Graphics::DrawApple(const std::pair<int, int> &applePos)
+void Graphics::DrawApple(const std::pair<int, int> &applePos, sf::Color appleColor)
 {
     sf::CircleShape appleShape(CELL_SIZE / 2);
-    appleShape.setFillColor(sf::Color::Red);
+    appleShape.setFillColor(appleColor);
     appleShape.setPosition(GridToPixel(applePos));
     window.draw(appleShape);
 }
 
-void Graphics::DrawSnake(const std::deque<std::pair<int, int>> &snakeBody)
+void Graphics::DrawSnake(const std::deque<std::pair<int, int>> &snakeBody, sf::Color headColor, sf::Color tailColor)
 {
-    //TODO вынести в константы цвета
     if (!snakeBody.empty())
     {
         sf::RectangleShape head(sf::Vector2f(CELL_SIZE - 2, CELL_SIZE - 2));
-        head.setFillColor(sf::Color::Green);
+        head.setFillColor(headColor);
         head.setPosition(GridToPixel(snakeBody.front()));
         window.draw(head);
 
         sf::RectangleShape bodySegment(sf::Vector2f(CELL_SIZE - 2, CELL_SIZE - 2));
-        bodySegment.setFillColor(sf::Color(0, 140, 0));
+        bodySegment.setFillColor(tailColor);
 
         for (size_t i = 1; i < snakeBody.size(); i++)
         {
@@ -91,13 +94,13 @@ void Graphics::PrintResult(bool gameWon, bool gameOver)
 {
     if (gameWon)
     {
-        PrintMessage("You Win!", 36, sf::Color::Green, {WINDOW_WIDTH / 4.f, WINDOW_HEIGHT / 3.f});
+        PrintMessage(WIN_MSG, 36, sf::Color::Green, {WINDOW_WIDTH / 4.f, WINDOW_HEIGHT / 3.f});
     }
     if (gameOver)
     {
-        PrintMessage("Game Over!", 36, sf::Color::Red, {WINDOW_WIDTH / 4.f, WINDOW_HEIGHT / 3.f});
+        PrintMessage(GAME_OVER_MSG, 36, sf::Color::Red, {WINDOW_WIDTH / 4.f, WINDOW_HEIGHT / 3.f});
     }
-    PrintMessage("Press R to restart or ESC to exit", 20, sf::Color::White, {WINDOW_WIDTH / 4.f, WINDOW_HEIGHT / 2.f});
+    PrintMessage(END_MSG, 20, sf::Color::White, {WINDOW_WIDTH / 4.f, WINDOW_HEIGHT / 2.f});
     window.display();
 }
 
@@ -128,11 +131,11 @@ void Graphics::ProcessEvents()
         {
             window.close();
         }
-        lastKeyPressed = SetDiraction(event);
+        lastKeyPressed = SetDirection(event);
     }
 }
 
-int Graphics::SetDiraction(std::optional<sf::Event> event)
+int Graphics::SetDirection(std::optional<sf::Event> event)
 {
     if (event && event->is<sf::Event::KeyPressed>())
     {

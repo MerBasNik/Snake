@@ -10,7 +10,7 @@ public:
     Apple();
     std::pair<int, int> GetPos();
     void Create(std::deque<std::pair<int, int>> snake);
-    void DrawApple(std::vector<std::vector<char>> &field);
+    // void DrawApple(std::vector<std::vector<char>> &field);
 private:
     std::pair<int, int> pos;
     std::pair<int, int> GeneratePosition();

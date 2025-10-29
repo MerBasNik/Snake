@@ -34,8 +34,8 @@ void Apple::Create(std::deque<std::pair<int, int>> snake)
     }
     pos = applePos;
 }
-
-void Apple::DrawApple(std::vector<std::vector<char>> &field)
-{
-    field[pos.second][pos.first] = APPLE;
-};
+//
+// void Apple::DrawApple(std::vector<std::vector<char>> &field)
+// {
+//     field[pos.second][pos.first] = APPLE;
+// };

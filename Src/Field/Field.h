@@ -11,9 +11,9 @@ class Field
 public:
     std::vector<std::vector<char>> field;
     Field();
-    void Clear();
-    std::vector<std::vector<char>> SetFieldBorder(const std::vector<std::vector<char>> &cleanField);
-    void Render(Snake &total);
+    // std::vector<std::vector<char>> SetFieldBorder(const std::vector<std::vector<char>> &cleanField);
+    // void Clear();
+    // void Render(Snake &total);
 private:
     std::vector<std::vector<char>> Init();
 };

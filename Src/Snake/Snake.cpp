@@ -15,28 +15,6 @@ std::deque<std::pair<int, int>> Snake::InitBody(int x, int y)
     return initBody;
 }
 
-void Snake::DrawSnake(std::vector<std::vector<char>> &field)
-{
-    DrawHead(field);
-    DrawTail(field);
-}
-
-void Snake::DrawHead(std::vector<std::vector<char>> &field)
-{
-    if (!body.empty())
-    {
-        field[body[0].second][body[0].first] = SNAKE_HEAD;
-    }
-}
-
-void Snake::DrawTail(std::vector<std::vector<char>> &field)
-{
-    for (int i = 1; i < body.size(); i++)
-    {
-        field[body[i].second][body[i].first] = SNAKE_TAIL;
-    }
-}
-
 std::pair<int, int> Snake::CalcNewPosition(int dir, const std::pair<int, int> &pos)
 {
     int x = pos.first;
@@ -112,7 +90,6 @@ void Snake::Eat(Apple &apple, const std::pair<int, int> &newHead, const std::deq
 
 bool Snake::IsAppleEaten(Apple &apple, const std::pair<int, int> &newHead)
 {
-    // const auto &head = body.front();
     std::pair<int, int> pos = apple.GetPos();
     return newHead.first == pos.first && newHead.second == pos.second;
 }
@@ -141,26 +118,6 @@ std::pair<int, int> Snake::CalcNewSegmentPos(const std::pair<int, int> &lastSegm
         case RIGHT_DIR: return {x - 1, y};
         case DOWN_DIR: return {x, y - 1};
         default: return {x, y};
-    }
-}
-
-int Snake::GetDirection()
-{
-    char ch = getchar();
-    return KeyToDirection(ch);
-}
-
-
-int Snake::KeyToDirection(char key)
-{
-    switch (key)
-    {
-        case UP_KEY: return UP_DIR;
-        case DOWN_KEY: return DOWN_DIR;
-        case LEFT_KEY: return LEFT_DIR;
-        case RIGHT_KEY: return RIGHT_DIR;
-        case EXIT_KEY: return EXIT;
-        default: return 0;
     }
 }
 
@@ -209,3 +166,42 @@ int Snake::GetTotal()
 {
     return total;
 }
+
+// int Snake::KeyToDirection(char key)
+// {
+//     switch (key)
+//     {
+//         case UP_KEY: return UP_DIR;
+//         case DOWN_KEY: return DOWN_DIR;
+//         case LEFT_KEY: return LEFT_DIR;
+//         case RIGHT_KEY: return RIGHT_DIR;
+//         case EXIT_KEY: return EXIT;
+//         default: return 0;
+//     }
+// }
+// int Snake::GetDirection()
+// {
+//     char ch = getchar();
+//     return KeyToDirection(ch);
+// }
+// void Snake::DrawSnake(std::vector<std::vector<char>> &field)
+// {
+//     DrawHead(field);
+//     DrawTail(field);
+// }
+//
+// void Snake::DrawHead(std::vector<std::vector<char>> &field)
+// {
+//     if (!body.empty())
+//     {
+//         field[body[0].second][body[0].first] = SNAKE_HEAD;
+//     }
+// }
+//
+// void Snake::DrawTail(std::vector<std::vector<char>> &field)
+// {
+//     for (int i = 1; i < body.size(); i++)
+//     {
+//         field[body[i].second][body[i].first] = SNAKE_TAIL;
+//     }
+// }
