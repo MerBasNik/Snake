@@ -21,6 +21,7 @@ std::pair<int, int> Snake::CalcNewPosition(int dir, const std::pair<int, int> &p
     int y = pos.second;
     if (dir != 0 && IsValidDirection(dir))
     {
+        direction = dir;
         return ApplyDirection(dir, x, y);
     }
     return ApplyDirection(direction, x, y);
@@ -55,10 +56,6 @@ bool Snake::Move(int dir, Apple &apple)
 {
     auto oldBody = body;
     auto newHeadPos = CalcNewPosition(dir, body.front());
-    if (dir != 0 && IsValidDirection(dir))
-    {
-        direction = dir;
-    }
     Eat(apple, newHeadPos, oldBody);
     auto newBody = CreateNewBody(newHeadPos);
     body = newBody;

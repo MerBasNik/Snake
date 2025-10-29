@@ -31,7 +31,7 @@ void Game::RunGame()
 {
     CheckGraphicInit();
     int inputKey;
-    bool moved;
+    bool isMoved;
     std::unordered_map<int, std::function<void()>> specialKeys = InitMapSpecialKeys();
     while (isRunning && graphics.IsWindowOpen())
     {
@@ -44,8 +44,8 @@ void Game::RunGame()
         } else {
             if (!gameOver && !gameWon)
             {
-                moved = snake.Move(inputKey, apple);
-                if (!moved)
+                isMoved = snake.Move(inputKey, apple);
+                if (!isMoved)
                 {
                     gameOver = true;
                 }

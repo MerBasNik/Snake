@@ -14,7 +14,7 @@ public:
     void Close();
     bool IsWindowOpen();
     void ProcessEvents();
-
+    int GetInput();
 private:
     sf::RenderWindow window;
     sf::Font font;
@@ -38,7 +38,6 @@ private:
     void DrawApple(const std::pair<int, int> &applePos, sf::Color appleColor);
     void DrawSnake(const std::deque<std::pair<int, int>> &snakeBody, sf::Color headColor, sf::Color tailColor);
     void DrawBorder(sf::Color borderColor);
-    int GetInput();
     sf::Vector2f GridToPixel(const std::pair<int, int> &gridPos);
     int SetDirection(std::optional<sf::Event> event);
     void PrintMessage(std::string msg, int size, sf::Color color, sf::Vector2f pos);

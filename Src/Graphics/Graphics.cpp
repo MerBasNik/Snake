@@ -37,6 +37,7 @@ void Graphics::Render(const std::deque<std::pair<int, int>>& snakeBody, const st
 
     scoreText.setString("Score: " + std::to_string(score));
     window.draw(scoreText);
+
     window.display();
 }
 
@@ -142,7 +143,6 @@ int Graphics::SetDirection(std::optional<sf::Event> event)
         auto keyEvent = event->getIf<sf::Event::KeyPressed>();
         if (keyEvent) {
             using enum sf::Keyboard::Key;
-
             switch (keyEvent->code)
             {
                 case Up: case W: return UP_DIR;
